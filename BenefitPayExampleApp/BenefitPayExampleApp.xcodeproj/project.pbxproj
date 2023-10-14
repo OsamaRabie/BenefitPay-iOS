@@ -1,0 +1,455 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 60;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		E80B32F42ACFC31D0010BC2D /* BenefitPayButtonExample.swift in Sources */ = {isa = PBXBuildFile; fileRef = E80B32F22ACFC31D0010BC2D /* BenefitPayButtonExample.swift */; };
+		E80B32F52ACFC31D0010BC2D /* BenefitPayButtonSettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E80B32F32ACFC31D0010BC2D /* BenefitPayButtonSettingsViewController.swift */; };
+		E80B32F82ACFC34F0010BC2D /* Toast in Frameworks */ = {isa = PBXBuildFile; productRef = E80B32F72ACFC34F0010BC2D /* Toast */; };
+		E80B32FB2ACFC35B0010BC2D /* Eureka in Frameworks */ = {isa = PBXBuildFile; productRef = E80B32FA2ACFC35B0010BC2D /* Eureka */; };
+		E81C7F7C2ADA57570042CDDE /* OnSuccessViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E81C7F7B2ADA57570042CDDE /* OnSuccessViewController.swift */; };
+		E84C70892ACE7FEB00901501 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E84C70882ACE7FEB00901501 /* AppDelegate.swift */; };
+		E84C708B2ACE7FEB00901501 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E84C708A2ACE7FEB00901501 /* SceneDelegate.swift */; };
+		E84C708D2ACE7FEB00901501 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E84C708C2ACE7FEB00901501 /* ViewController.swift */; };
+		E84C70902ACE7FEB00901501 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E84C708E2ACE7FEB00901501 /* Main.storyboard */; };
+		E84C70922ACE7FED00901501 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E84C70912ACE7FED00901501 /* Assets.xcassets */; };
+		E84C70952ACE7FED00901501 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E84C70932ACE7FED00901501 /* LaunchScreen.storyboard */; };
+		E84C709E2ACE801200901501 /* BenefitPay-iOS in Frameworks */ = {isa = PBXBuildFile; productRef = E84C709D2ACE801200901501 /* BenefitPay-iOS */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		E80B32F22ACFC31D0010BC2D /* BenefitPayButtonExample.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BenefitPayButtonExample.swift; sourceTree = "<group>"; };
+		E80B32F32ACFC31D0010BC2D /* BenefitPayButtonSettingsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BenefitPayButtonSettingsViewController.swift; sourceTree = "<group>"; };
+		E81C7F742ADA4AC70042CDDE /* BenefitPayExampleApp.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = BenefitPayExampleApp.entitlements; sourceTree = "<group>"; };
+		E81C7F7B2ADA57570042CDDE /* OnSuccessViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnSuccessViewController.swift; sourceTree = "<group>"; };
+		E84C70852ACE7FEB00901501 /* BenefitPayExampleApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BenefitPayExampleApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		E84C70882ACE7FEB00901501 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		E84C708A2ACE7FEB00901501 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
+		E84C708C2ACE7FEB00901501 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		E84C708F2ACE7FEB00901501 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		E84C70912ACE7FED00901501 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		E84C70942ACE7FED00901501 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		E84C70962ACE7FED00901501 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		E84C70822ACE7FEB00901501 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				E80B32F82ACFC34F0010BC2D /* Toast in Frameworks */,
+				E84C709E2ACE801200901501 /* BenefitPay-iOS in Frameworks */,
+				E80B32FB2ACFC35B0010BC2D /* Eureka in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		E84C707C2ACE7FEB00901501 = {
+			isa = PBXGroup;
+			children = (
+				E84C70872ACE7FEB00901501 /* BenefitPayExampleApp */,
+				E84C70862ACE7FEB00901501 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		E84C70862ACE7FEB00901501 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				E84C70852ACE7FEB00901501 /* BenefitPayExampleApp.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		E84C70872ACE7FEB00901501 /* BenefitPayExampleApp */ = {
+			isa = PBXGroup;
+			children = (
+				E81C7F742ADA4AC70042CDDE /* BenefitPayExampleApp.entitlements */,
+				E84C70882ACE7FEB00901501 /* AppDelegate.swift */,
+				E84C708A2ACE7FEB00901501 /* SceneDelegate.swift */,
+				E84C708C2ACE7FEB00901501 /* ViewController.swift */,
+				E80B32F32ACFC31D0010BC2D /* BenefitPayButtonSettingsViewController.swift */,
+				E80B32F22ACFC31D0010BC2D /* BenefitPayButtonExample.swift */,
+				E84C708E2ACE7FEB00901501 /* Main.storyboard */,
+				E84C70912ACE7FED00901501 /* Assets.xcassets */,
+				E84C70932ACE7FED00901501 /* LaunchScreen.storyboard */,
+				E84C70962ACE7FED00901501 /* Info.plist */,
+				E81C7F7B2ADA57570042CDDE /* OnSuccessViewController.swift */,
+			);
+			path = BenefitPayExampleApp;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		E84C70842ACE7FEB00901501 /* BenefitPayExampleApp */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = E84C70992ACE7FED00901501 /* Build configuration list for PBXNativeTarget "BenefitPayExampleApp" */;
+			buildPhases = (
+				E84C70812ACE7FEB00901501 /* Sources */,
+				E84C70822ACE7FEB00901501 /* Frameworks */,
+				E84C70832ACE7FEB00901501 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = BenefitPayExampleApp;
+			packageProductDependencies = (
+				E84C709D2ACE801200901501 /* BenefitPay-iOS */,
+				E80B32F72ACFC34F0010BC2D /* Toast */,
+				E80B32FA2ACFC35B0010BC2D /* Eureka */,
+			);
+			productName = BenefitPayExampleApp;
+			productReference = E84C70852ACE7FEB00901501 /* BenefitPayExampleApp.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		E84C707D2ACE7FEB00901501 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastSwiftUpdateCheck = 1500;
+				LastUpgradeCheck = 1500;
+				TargetAttributes = {
+					E84C70842ACE7FEB00901501 = {
+						CreatedOnToolsVersion = 15.0;
+					};
+				};
+			};
+			buildConfigurationList = E84C70802ACE7FEB00901501 /* Build configuration list for PBXProject "BenefitPayExampleApp" */;
+			compatibilityVersion = "Xcode 14.0";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = E84C707C2ACE7FEB00901501;
+			packageReferences = (
+				E84C709C2ACE801200901501 /* XCLocalSwiftPackageReference ".." */,
+				E80B32F62ACFC34F0010BC2D /* XCRemoteSwiftPackageReference "toast-swift" */,
+				E80B32F92ACFC35B0010BC2D /* XCRemoteSwiftPackageReference "Eureka" */,
+			);
+			productRefGroup = E84C70862ACE7FEB00901501 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				E84C70842ACE7FEB00901501 /* BenefitPayExampleApp */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		E84C70832ACE7FEB00901501 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				E84C70952ACE7FED00901501 /* LaunchScreen.storyboard in Resources */,
+				E84C70922ACE7FED00901501 /* Assets.xcassets in Resources */,
+				E84C70902ACE7FEB00901501 /* Main.storyboard in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		E84C70812ACE7FEB00901501 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				E84C708D2ACE7FEB00901501 /* ViewController.swift in Sources */,
+				E80B32F52ACFC31D0010BC2D /* BenefitPayButtonSettingsViewController.swift in Sources */,
+				E84C70892ACE7FEB00901501 /* AppDelegate.swift in Sources */,
+				E84C708B2ACE7FEB00901501 /* SceneDelegate.swift in Sources */,
+				E80B32F42ACFC31D0010BC2D /* BenefitPayButtonExample.swift in Sources */,
+				E81C7F7C2ADA57570042CDDE /* OnSuccessViewController.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXVariantGroup section */
+		E84C708E2ACE7FEB00901501 /* Main.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				E84C708F2ACE7FEB00901501 /* Base */,
+			);
+			name = Main.storyboard;
+			sourceTree = "<group>";
+		};
+		E84C70932ACE7FED00901501 /* LaunchScreen.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				E84C70942ACE7FED00901501 /* Base */,
+			);
+			name = LaunchScreen.storyboard;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		E84C70972ACE7FED00901501 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		E84C70982ACE7FED00901501 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		E84C709A2ACE7FED00901501 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
+				CODE_SIGN_ENTITLEMENTS = BenefitPayExampleApp/BenefitPayExampleApp.entitlements;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = G46S76PUH4;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = BenefitPayExampleApp/Info.plist;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen.storyboard;
+				INFOPLIST_KEY_UIMainStoryboardFile = Main;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = tap.BenefitPayExampleApp;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Debug;
+		};
+		E84C709B2ACE7FED00901501 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
+				CODE_SIGN_ENTITLEMENTS = BenefitPayExampleApp/BenefitPayExampleApp.entitlements;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = G46S76PUH4;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = BenefitPayExampleApp/Info.plist;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen.storyboard;
+				INFOPLIST_KEY_UIMainStoryboardFile = Main;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = tap.BenefitPayExampleApp;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		E84C70802ACE7FEB00901501 /* Build configuration list for PBXProject "BenefitPayExampleApp" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				E84C70972ACE7FED00901501 /* Debug */,
+				E84C70982ACE7FED00901501 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		E84C70992ACE7FED00901501 /* Build configuration list for PBXNativeTarget "BenefitPayExampleApp" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				E84C709A2ACE7FED00901501 /* Debug */,
+				E84C709B2ACE7FED00901501 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+
+/* Begin XCLocalSwiftPackageReference section */
+		E84C709C2ACE801200901501 /* XCLocalSwiftPackageReference ".." */ = {
+			isa = XCLocalSwiftPackageReference;
+			relativePath = ..;
+		};
+/* End XCLocalSwiftPackageReference section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		E80B32F62ACFC34F0010BC2D /* XCRemoteSwiftPackageReference "toast-swift" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/BastiaanJansen/toast-swift";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 2.0.0;
+			};
+		};
+		E80B32F92ACFC35B0010BC2D /* XCRemoteSwiftPackageReference "Eureka" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/xmartlabs/Eureka.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 5.4.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		E80B32F72ACFC34F0010BC2D /* Toast */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = E80B32F62ACFC34F0010BC2D /* XCRemoteSwiftPackageReference "toast-swift" */;
+			productName = Toast;
+		};
+		E80B32FA2ACFC35B0010BC2D /* Eureka */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = E80B32F92ACFC35B0010BC2D /* XCRemoteSwiftPackageReference "Eureka" */;
+			productName = Eureka;
+		};
+		E84C709D2ACE801200901501 /* BenefitPay-iOS */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = "BenefitPay-iOS";
+		};
+/* End XCSwiftPackageProductDependency section */
+	};
+	rootObject = E84C707D2ACE7FEB00901501 /* Project object */;
+}
