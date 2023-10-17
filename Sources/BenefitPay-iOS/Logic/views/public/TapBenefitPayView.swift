@@ -30,6 +30,8 @@ import SharedDataModels_iOS
     internal var handleOnCancel:Bool = true
     /// Keeps a reference to the gif loader we will display when coming back from pay with benefit pay app
     internal var benefitGifLoader:UIImageView?
+    /// Holds the latest onSuccess url called when the app is in background. Will be used to call when the user focuses the app agian
+    internal var onSuccessURL:URL? = nil
     /// The headers encryption key
     internal var headersEncryptionPublicKey:String {
         if getBenefitPaySDKKey().contains("test") {
@@ -79,11 +81,17 @@ Hj+N6UWFOYK98Xi+sQIDAQAB
     /// A notificationfunction will be called once the app is moved to backgorund
     /// We will need to show back the benefitpay button, this will only be fired, if the user is showing the middle page that displays the benefitpay app afterwards
     @objc private func appMovingTForeground() {
-        // Now let us check if the benefitpay app popup is displayed
-        if SwiftEntryKit.isCurrentlyDisplaying(entryNamed: "TapBenefitPayEntry") {
-            // let us close it and display the benefitay pay popup again
-            removeBenefitPayAppEntry()
+        // First, check if the current screen is the paywithebenefitpayapp popup, then we remove it and show the loader on the pay qith benefit qr popup
+        if !removeBenefitPayAppEntry() {
+            // This means, we are already in the pay with benefit qr ode and we only need to how the loader maybe the chrge will be updated
+            showGifLoader(show: true)
         }
+        /*
+         // SWIPE Now let us check if the benefitpay app popup is displayed
+         if SwiftEntryKit.isCurrentlyDisplaying(entryNamed: "TapBenefitPayEntry") {
+             // let us close it and display the benefitay pay popup again
+             removeBenefitPayAppEntry()
+         */
     }
     
     /// Used to open a url inside the Tap card web sdk.
@@ -108,7 +116,7 @@ Hj+N6UWFOYK98Xi+sQIDAQAB
         preferences.javaScriptEnabled = true
         preferences.javaScriptCanOpenWindowsAutomatically = true
         let configuration = WKWebViewConfiguration()
-        
+        configuration.defaultWebpagePreferences.preferredContentMode = .desktop
         
         webView = WKWebView(frame: .zero, configuration: configuration)
         // Let us make sure it is of a clear background and opaque, not to interfer with the merchant's app background
@@ -135,56 +143,54 @@ Hj+N6UWFOYK98Xi+sQIDAQAB
         let right = webView.rightAnchor.constraint(equalTo: self.rightAnchor)
         let bottom = webView.bottomAnchor.constraint(equalTo: self.bottomAnchor)
         let buttonHeight = self.heightAnchor.constraint(greaterThanOrEqualToConstant: 48)
-        
+        // SWIPE let buttonHeight = self.heightAnchor.constraint(greaterThanOrEqualToConstant: 48)
         
         // Activate the constraints
         NSLayoutConstraint.activate([left, right, top, bottom, buttonHeight])
+        webView.layoutIfNeeded()
+        webView.updateConstraints()
+        self.layoutIfNeeded()
     }
     
     /// Will add the web view again to the normal view after removing it from the popup screen we presented to show the benefitpay popup
     internal func addWebViewToContainerView() {
         DispatchQueue.main.async {
             self.webView.removeFromSuperview()
+            self.webView.frame = .zero
             self.addSubview(self.webView)
             self.setupConstraints()
         }
     }
     
     /// A function responsible for closing the pay with benefitpay app popup and displays back the beneftpay QR code popup
-    internal func removeBenefitPayAppEntry() {
+    /// - Parameter onDosmiss: a callback if needed to do some logic post closeing
+    /// - Returns: true if the top controller was the payw tihbenefitpayapp popup and it is dismissed now
+    internal func removeBenefitPayAppEntry(onDismiss:@escaping()->() = {}) -> Bool {
         // First let us check that when the user left the app, he was at the BenefitPayAPp redirection page
-        guard SwiftEntryKit.isCurrentlyDisplaying(entryNamed: "TapBenefitPayEntry") else { return } // nothing to do
-        DispatchQueue.main.asyncAfter(deadline: .now()) {
-            self.webView.alpha = 1
-            // Now, because the user left the app from BenefitPayApp redirection, we need to:
-            // 1. Show back the benefit pay QR popup
-            // 2. Display a loader for 5 seconds to allow listening to teh charge status change (if any) from
-            SwiftEntryKit.dismiss(.specific(entryName: "TapBenefitPayEntry")) {
-                // Show the QR original popup
-                self.webView.alpha = 1
-                let view:UIView = self.createBenefitPayPopUpView()
-                self.webView.isHidden = false
-                self.webView.isUserInteractionEnabled = false
-                self.benefitGifLoader?.isHidden = false
-                SwiftEntryKit.display(entry: view, using: self.entryAttributes(intoAnimation: false))
-                // Hide the loader after 4 seconds, if nothing happened meaning, no charge updates
-                DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(5)) {
-                    self.benefitGifLoader?.isHidden = true
-                    self.webView.isUserInteractionEnabled = true
-                }
-            }
+        guard let topMostVC:UIViewController = UIApplication.shared.topViewController(),
+              topMostVC.restorationIdentifier == "TapBenefitPayEntry" else { return false } // nothing to do
+        
+        // If this is the pay with benefitpayapp popup page, we need to go back to the benefitPay page and show the loader
+        topMostVC.dismiss(animated: true) {
+            self.showGifLoader(show: true)
+            onDismiss()
         }
+        return true
     }
+    
+    
+    
     
     
     /// Call it when you want to remove the benefitpay entry and get back to the merchant app
     /// - Parameter shouldStopOnCancel: Whether or not, we should listen to the onCancel coming after this event or not.
+    /// - Parameter onDosmiss: a callback if needed to do some logic post closeing
     internal func removeBenefitPayPopupEntry(handleOnCancel:Bool = false,  onDismiss:@escaping()->()) {
-        self.handleOnCancel = handleOnCancel
-        webView.isHidden = false
-        self.addWebViewToContainerView()
+        guard let viewController:UIViewController = UIApplication.shared.topViewController(),
+              viewController.restorationIdentifier == "BenefitQRVC" else { return }
         benefitGifLoader?.isHidden = true
-        SwiftEntryKit.dismiss{
+        self.addWebViewToContainerView()
+        viewController.dismiss(animated: true) {
             onDismiss()
         }
     }

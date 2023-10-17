@@ -66,12 +66,12 @@ internal extension BenefitPayButton {
     /// Will create a view that contains a full screen web view to display within the benefit pay modal popup
     /// Also, will add the benefit pay gif loader in the center of the modal screen
     /// - Parameter showBenefitPayLoader: Decides whether or not to show the benefit pay loader
-    func createBenefitPayPopUpView() -> UIView {
+    func createBenefitPayPopUpView() -> UIViewController {
         // The container iew
         let view:UIView = .init()
         view.backgroundColor = .clear
         
-        webView.isHidden = true
+        //webView.isHidden = true
         webView.removeFromSuperview()
         view.addSubview(webView)
         
@@ -100,18 +100,35 @@ internal extension BenefitPayButton {
         self.webView.translatesAutoresizingMaskIntoConstraints = false
         benefitGifLoader?.translatesAutoresizingMaskIntoConstraints = false
         
-        return view
+        
+        let ctr:UIViewController = .init()
+        ctr.view.backgroundColor = .clear
+        ctr.modalPresentationStyle = .overCurrentContext
+        ctr.view.addSubview(view)
+        ctr.restorationIdentifier = "BenefitQRVC"
+        view.translatesAutoresizingMaskIntoConstraints = false
+        
+        let vtop  = view.topAnchor.constraint(equalTo: ctr.view.topAnchor)
+        let vleft = view.leftAnchor.constraint(equalTo: ctr.view.leftAnchor)
+        let vright = view.rightAnchor.constraint(equalTo: ctr.view.rightAnchor)
+        let vbottom = view.bottomAnchor.constraint(equalTo: ctr.view.bottomAnchor,constant: 60)
+        
+        // Activate the constraints
+        NSLayoutConstraint.activate([left, right, top, bottom, vtop, vleft, vright, vbottom])
+        
+        return ctr
     }
     
     
     /// Responsible for creating the modal view that will display the middle page reqiured to display before navigating the user to BenefitPayApp
     /// - Returns: The view, the webview within and the back button
-    func createBenefitPayWithAppPopupView() -> (UIView,WKWebView,UIButton) {
+    func createBenefitPayWithAppPopupView() -> (UIViewController,WKWebView,UIButton) {
         // Create the web view and its configuations
         let preferences = WKPreferences()
         preferences.javaScriptEnabled = true
         preferences.javaScriptCanOpenWindowsAutomatically = true
         let configuration = WKWebViewConfiguration()
+        configuration.defaultWebpagePreferences.preferredContentMode = .desktop
         let web:WKWebView = .init(frame: .zero,configuration: configuration)
         web.uiDelegate = self
         web.navigationDelegate = self
@@ -124,10 +141,12 @@ internal extension BenefitPayButton {
         backButton.setImage(UIImage(named: "Close",in: Bundle.currentBundle, with: nil), for: .normal)
         backButton.backgroundColor = .clear
         backButton.addAction {
-            self.removeBenefitPayAppEntry()
+            let _ = self.removeBenefitPayAppEntry()
         }
         view.addSubview(web)
         view.addSubview(backButton)
+        web.translatesAutoresizingMaskIntoConstraints = false
+        backButton.translatesAutoresizingMaskIntoConstraints = false
         
         // Setyo the web view constraint to be full screen
         let top  = web.topAnchor.constraint(equalTo: view.topAnchor)
@@ -136,7 +155,7 @@ internal extension BenefitPayButton {
         let bottom = web.bottomAnchor.constraint(equalTo: view.bottomAnchor)
         
         // Setup the back button position
-        let btop  = backButton.topAnchor.constraint(equalTo: web.topAnchor, constant: 20)
+        let btop  = backButton.topAnchor.constraint(equalTo: web.topAnchor, constant: 60)
         let bright = backButton.rightAnchor.constraint(equalTo: web.rightAnchor, constant: -20)
         let bwidth = backButton.widthAnchor.constraint(equalToConstant: 32)
         let bheight = backButton.heightAnchor.constraint(equalToConstant: 32)
@@ -144,7 +163,22 @@ internal extension BenefitPayButton {
         // Activate the constraints
         NSLayoutConstraint.activate([left, right, top, bottom, btop, bright, bwidth, bheight])
         
-        return (view,web,backButton)
+        let ctr:UIViewController = .init()
+        ctr.view.backgroundColor = .clear
+        ctr.modalPresentationStyle = .overCurrentContext
+        ctr.view.addSubview(view)
+        ctr.restorationIdentifier = "TapBenefitPayEntry"
+        view.translatesAutoresizingMaskIntoConstraints = false
+        
+        let vtop  = view.topAnchor.constraint(equalTo: ctr.view.topAnchor)
+        let vleft = view.leftAnchor.constraint(equalTo: ctr.view.leftAnchor)
+        let vright = view.rightAnchor.constraint(equalTo: ctr.view.rightAnchor)
+        let vbottom = view.bottomAnchor.constraint(equalTo: ctr.view.bottomAnchor,constant: 60)
+        
+        // Activate the constraints
+        NSLayoutConstraint.activate([left, right, top, bottom, vtop, vleft, vright, vbottom])
+        
+        return (ctr,web,backButton)
     }
     
     /// Creates a UIImageView od the BenefitPay gif asset
@@ -167,11 +201,29 @@ internal extension BenefitPayButton {
         }
         return nil
     }
+    
+    func showGifLoader(show:Bool) {
+        if(show) {
+            self.webView.isUserInteractionEnabled = false
+            self.benefitGifLoader?.isHidden = false
+            DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(2)) {
+                self.benefitGifLoader?.isHidden = true
+                self.webView.isUserInteractionEnabled = true
+                if let onSuccessURL = self.onSuccessURL {
+                    self.handleOnSuccess(url: onSuccessURL)
+                    self.onSuccessURL = nil
+                }
+            }
+        }else{
+            self.benefitGifLoader?.isHidden = true
+            self.webView.isUserInteractionEnabled = true
+        }
+    }
 }
 
 
 
-extension UIApplication {
+internal extension UIApplication {
     func topViewController() -> UIViewController? {
         var topViewController: UIViewController? = nil
         if #available(iOS 13, *) {

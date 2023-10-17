@@ -25,8 +25,8 @@ BenefitPay-iOS Example App</string>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="benefit_pay" translatesAutoresizingMaskIntoConstraints="NO" id="xgG-7u-tW2">
-                                <rect key="frame" x="20" y="403.66666666666669" width="353" height="45"/>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" alpha="0.75" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="benefit_pay" translatesAutoresizingMaskIntoConstraints="NO" id="xgG-7u-tW2">
+                                <rect key="frame" x="20" y="753" width="353" height="45"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="45" id="JMz-pG-jYx"/>
                                 </constraints>
@@ -36,7 +36,7 @@ BenefitPay-iOS Example App</string>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="xgG-7u-tW2" secondAttribute="trailing" constant="20" id="3gB-5O-swH"/>
-                            <constraint firstItem="xgG-7u-tW2" firstAttribute="centerY" secondItem="Ze5-6b-2t3" secondAttribute="centerY" id="5TD-G5-YJI"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="xgG-7u-tW2" secondAttribute="bottom" constant="20" id="6HP-80-xgV"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="CUp-jM-oZQ" secondAttribute="trailing" id="8Ml-jp-3ft"/>
                             <constraint firstItem="CUp-jM-oZQ" firstAttribute="centerX" secondItem="Ze5-6b-2t3" secondAttribute="centerX" id="E7i-5D-g3p"/>
                             <constraint firstItem="xgG-7u-tW2" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="20" id="Oah-Sv-mgr"/>

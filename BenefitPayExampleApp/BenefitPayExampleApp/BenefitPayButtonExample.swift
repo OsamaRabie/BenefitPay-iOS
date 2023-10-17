@@ -14,7 +14,7 @@ class BenefitPayButtonExample: UIViewController {
     
     
     
-    var dictConfig:[String:Any] = ["operator":["publicKey":"pk_test_HJN863LmO15EtDgo9cqK7sjS","hashString":""],
+    var dictConfig:[String:Any] = ["operator":["publicKey":"pk_test_HJN863LmO15EtDgo9cqK7sjS","hashString":"OSAMA"],
                                    "order":["id":"",
                                             "amount":0.1,
                                             "currency":"BHD",
@@ -98,7 +98,9 @@ extension BenefitPayButtonExample: BenefitPayButtonDelegate {
            let jsonData = try? JSONSerialization.data(withJSONObject: json, options: .prettyPrinted) {
             let controller:OnSuccessViewController = storyboard?.instantiateViewController(withIdentifier: "OnSuccessViewController") as! OnSuccessViewController
             controller.string = String(decoding: jsonData, as: UTF8.self)
-            self.present(controller, animated: true, completion: nil)
+            DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(1)) {
+                self.present(controller, animated: true, completion: nil)
+            }
         } else {
             print("json data malformed")
         }
