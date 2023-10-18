@@ -6,12 +6,11 @@
 //
 
 import UIKit
-import SwiftEntryKit
 import WebKit
 
 internal extension BenefitPayButton {
     
-    /**
+   /* /**
      Defines the attributes needed to dislay the full screen modal for the BenefitPay popup
      - Parameter intorAnimation: defines whether or not to apply intro animation
      - Parameter exitAnimation: defines whether or not to apply exit animation
@@ -61,7 +60,7 @@ internal extension BenefitPayButton {
             fade: .init(from: 1, to: 0, duration: 0.5)) : .none
         
         return attributes
-    }
+    }*/
     
     /// Will create a view that contains a full screen web view to display within the benefit pay modal popup
     /// Also, will add the benefit pay gif loader in the center of the modal screen

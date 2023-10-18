@@ -14,7 +14,6 @@ let package = Package(
     ],
     dependencies: [ 
         // Dependencies declare other packages that this package depends on.
-        .package(url: "https://github.com/huri000/SwiftEntryKit.git", from: "1.0.0"),
         .package(url: "https://github.com/TakeScoop/SwiftyRSA.git", from: "1.0.0"),
         .package(url: "https://github.com/Tap-Payments/SharedDataModels-iOS.git", from: "0.0.1"),
         .package(url: "https://github.com/ahmdx/Robin", from: "0.98.0"),
@@ -24,8 +23,7 @@ let package = Package(
         // Targets can depend on other targets in this package and products from dependencies.
         .target(
             name: "BenefitPay-iOS",
-            dependencies: ["SwiftEntryKit",
-                           "SwiftyRSA",
+            dependencies: ["SwiftyRSA",
                            "Robin",
                           "SharedDataModels-iOS"],
             resources: [.copy("Resources/Close.png"),

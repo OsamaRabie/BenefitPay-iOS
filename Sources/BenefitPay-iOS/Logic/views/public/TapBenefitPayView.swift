@@ -7,7 +7,6 @@
 
 import UIKit
 import WebKit
-import SwiftEntryKit
 import SharedDataModels_iOS
 
 /// The custom view that provides an interface for the  benefit pay button

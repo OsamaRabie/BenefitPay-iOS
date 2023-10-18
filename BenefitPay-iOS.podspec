@@ -9,13 +9,10 @@ Pod::Spec.new do |s|
   s.ios.deployment_target = '13.0'
   s.swift_version = '5.0'
   s.source_files = 'Sources/BenefitPay-iOS/Logic/**/*.swift'
-  s.resources = "Sources/Card-iOS/Resources/**/*.{json,xib,pdf,png,gif,storyboard,xcassets,xcdatamodeld,lproj}"
-  s.dependency'SwiftEntryKit'
+  s.resources = "Sources/BenefitPay-iOS/Resources/**/*.{json,xib,pdf,png,gif,storyboard,xcassets,xcdatamodeld,lproj}"
   s.dependency'SwiftyRSA'
-  s.dependency'SnapKit'
   s.dependency'SharedDataModels-iOS'
-  s.dependency'TapCardScannerWebWrapper-iOS'
-  s.dependency'TapFontKit-iOS'
+  s.dependency'Robin'
   
   
 end

@@ -9,7 +9,6 @@ import Foundation
 import UIKit
 import WebKit
 import SharedDataModels_iOS
-import SwiftEntryKit
 import Robin
 import UserNotifications
 import UserNotificationsUI
