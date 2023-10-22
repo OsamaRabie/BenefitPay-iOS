@@ -115,7 +115,7 @@ Each parameter is linked to the  [reference](https://developers.tap.company/docs
 
 |Parameter|Description | Required | Type| Sample
 |--|--|--| --|--|
-| operator| It has the key obtained after registering your package name, also known as Public key. Also, the [hashString](https://developers.tap.company/docs/webhook#validate-the-webhook-hashstring) value which is used to validate live charges. | True  | `Dictionary`| `let operator:[String:Any]: ["publicKey":"pk_test_YhUjg9PNT8oDlKJ1aE2fMRz7", "hashString":""]` |
+| operator| It has the key obtained after registering your package name, also known as Public key. Also, the [hashString](https://developers.tap.company/docs/webhook#validate-the-webhook-hashstring) value which is used to validate live charges. | True  | `Dictionary`| `let operator:[String:Any]: ["publicKey":"pk_test_YhUjg9PNT8oDlKJ1aE2fMRz7", "hashstring":""]` |
 | order| Order details linked to the charfe. | True  | `Dictionary`| ` let order:[String:String] = ["id":"", "amount":1, "currency":"SAR", "description": " description","reference":"","metadata":[:]]` |
 | customer|Customer details for charge process. | True  | `Dictionary`| ` let customer = ["id":"","name":[["lang":"en","first":"TAP","middle":"","last":"PAYMENTS"]], "contact":["email":"tap@tap.company", "phone":["countryCode":"+965","number":"88888888"]]]` |
 
@@ -132,7 +132,7 @@ After creating the UI using any of the previously mentioned ways, it is time to 
 /// The minimum needed configuration dictionary
     let parameters: [String: Any] =
       [
-      "operator": ["publicKey": "pk_test_HJN863LmO15EtDgo9cqK7sjS", "hashString": ""],
+      "operator": ["publicKey": "pk_test_HJN863LmO15EtDgo9cqK7sjS", "hashstring": ""],
       "order": [
         "id": "",
         "amount": 0.1,
@@ -169,7 +169,7 @@ class ViewController: UIViewController {
   /// The minimum needed configuration dictionary
   let parameters: [String: Any] =
     [
-      "operator": ["publicKey": "pk_test_HJN863LmO15EtDgo9cqK7sjS", "hashString": ""],
+      "operator": ["publicKey": "pk_test_HJN863LmO15EtDgo9cqK7sjS", "hashstring": ""],
       "order": [
         "id": "",
         "amount": 0.1,
@@ -261,7 +261,7 @@ class ViewController: UIViewController {
   /// The minimum needed configuration dictionary
   let parameters: [String: Any] =
     [
-      "operator": ["publicKey": "pk_test_HJN863LmO15EtDgo9cqK7sjS", "hashString": ""],
+      "operator": ["publicKey": "pk_test_HJN863LmO15EtDgo9cqK7sjS", "hashstring": ""],
       "order": [
         "id": "",
         "amount": 0.1,
@@ -329,7 +329,7 @@ The advanced configuration for the BenefitPay-iOS integration not only has all t
 Each parameter is linked to the  [reference](https://developers.tap.company/docs/benefit-pay-ios#reference)  section, which provides a more in depth explanation of it.
 |Configuration|Description | Required | Type| Sample
 |--|--|--| --|--|
-| operator|It has the key obtained after registering your package name, also known as Public key. Also, the [hashString](https://developers.tap.company/docs/webhook#validate-the-webhook-hashstring) value which is used to validate live charges. | True  | `Dictionary`| `let operator:[String:Any]: ["publicKey":"pk_test_YhUjg9PNT8oDlKJ1aE2fMRz7", "hashString":""]` |
+| operator|It has the key obtained after registering your package name, also known as Public key. Also, the [hashString](https://developers.tap.company/docs/webhook#validate-the-webhook-hashstring) value which is used to validate live charges. | True  | `Dictionary`| `let operator:[String:Any]: ["publicKey":"pk_test_YhUjg9PNT8oDlKJ1aE2fMRz7", "hashstring":""]` |
 | order| Order details linked to the charge. | True  | `Dictionary`| ` let order:[String:String] = ["id":"", "amount":1, "currency":"SAR", "description": " description","reference":"","metadata":[:]]` |
 | invoice| Invoice id to link to the order (optional). | False  | `Dictionary`| ` let invoice:[String:String] = ["id":""]` |
 | merchant| Merchant id obtained after registering your bundle id. | True  | `Dictionary`| ` let merchant:[String:String] = ["id":""]` |
@@ -344,7 +344,7 @@ You can use a Dictionary  to send data to our SDK. The benefit is that you can g
 ```swift
   /// The   configuration dictionary
   let parameters: [String: Any] =  [
-      "operator": ["publicKey": "pk_test_HJN863LmO15EtDgo9cqK7sjS", "hashString": ""],
+      "operator": ["publicKey": "pk_test_HJN863LmO15EtDgo9cqK7sjS", "hashstring": ""],
       "order": [
         "id": "",
         "amount": 0.1,
@@ -433,7 +433,7 @@ class ViewController: UIViewController {
   /// The minimum needed configuration dictionary
   let parameters: [String: Any] =
     [
-      "operator": ["publicKey": "pk_test_HJN863LmO15EtDgo9cqK7sjS", "hashString": ""],
+      "operator": ["publicKey": "pk_test_HJN863LmO15EtDgo9cqK7sjS", "hashstring": ""],
       "order": [
         "id": "",
         "amount": 0.1,
@@ -534,7 +534,7 @@ Below you will find more details about each parameter shared in the above tables
 4. Example:
         
 ```swift
-let operator:[String:Any]: ["publicKey":"pk_test_YhUjg9PNT8oDlKJ1aE2fMRz7", "hashString":""]
+let operator:[String:Any]: ["publicKey":"pk_test_YhUjg9PNT8oDlKJ1aE2fMRz7", "hashstring":""]
 ```
 ##  order [](https://developers.tap.company/docs/benefit-pay-ios#order)
 
