@@ -9,7 +9,7 @@ import Foundation
 import UIKit
 
 /// VisualEffectView is a dynamic background blur view.
-internal class CardVisualEffectView: UIVisualEffectView {
+internal class TapVisualEffectView: UIVisualEffectView {
     
     /// Returns the instance of UIBlurEffect.
     private let blurEffect = (NSClassFromString("_UICustomBlurEffect") as! UIBlurEffect.Type).init()
@@ -105,7 +105,7 @@ internal class CardVisualEffectView: UIVisualEffectView {
 
 // MARK: - Helpers
 
-private extension CardVisualEffectView {
+private extension TapVisualEffectView {
     
     /// Returns the value for the key on the blurEffect.
     func _value<T>(forKey key: Key) -> T? {

@@ -25,25 +25,27 @@ extension BenefitPayButton:WKNavigationDelegate {
         
         guard let url = navigationAction.request.url else { return }
         
-        if url.absoluteString.hasPrefix(tapBenefitWebSDKUrlScheme) {
+        if url.absoluteString.hasPrefix(payButtonType.webSdkScheme()) {
             print("navigationAction", url.absoluteString)
             action = .cancel
         }else{
             print("navigationAction", url.absoluteString)
         }
+        // In all cases when we get a feedback from the web view we will need to hide the loader if it is being displayed
+        self.loadingView.isHidden = true
         // Let us see if the web sdk is telling us something
-        if( url.absoluteString.contains(tapBenefitWebSDKUrlScheme)) {
+        if( url.absoluteString.contains(payButtonType.webSdkScheme())) {
             switch url.absoluteString {
-            case _ where url.absoluteString.contains(TapBenefitWebCallBacksEnums.onError.rawValue):
+            case _ where url.absoluteString.contains(CallBackSchemeEnum.onError.rawValue):
                 self.handleOnError(data: tap_extractDataFromUrl(url, for: "data", shouldBase64Decode: true))
                 break
-            case _ where url.absoluteString.contains(TapBenefitWebCallBacksEnums.onOrderCreated.rawValue):
+            case _ where url.absoluteString.contains(CallBackSchemeEnum.onOrderCreated.rawValue):
                 delegate?.onOrderCreated?(data: tap_extractDataFromUrl(url, for: "data", shouldBase64Decode: false))
                 break
-            case _ where url.absoluteString.contains(TapBenefitWebCallBacksEnums.onChargeCreated.rawValue):
+            case _ where url.absoluteString.contains(CallBackSchemeEnum.onChargeCreated.rawValue):
                 delegate?.onChargeCreated?(data: tap_extractDataFromUrl(url, for: "data", shouldBase64Decode: true))
                 break
-            case _ where url.absoluteString.contains(TapBenefitWebCallBacksEnums.onSuccess.rawValue):
+            case _ where url.absoluteString.contains(CallBackSchemeEnum.onSuccess.rawValue):
                 
                 let notificationContent = UNMutableNotificationContent()
                    notificationContent.title = "Payment updated"
@@ -67,14 +69,13 @@ extension BenefitPayButton:WKNavigationDelegate {
                     self.onSuccessURL = url
                 }
                 break
-            case _ where url.absoluteString.contains(TapBenefitWebCallBacksEnums.onReady.rawValue):
+            case _ where url.absoluteString.contains(CallBackSchemeEnum.onReady.rawValue):
                 delegate?.onReady?()
                 break
-            case _ where url.absoluteString.contains(TapBenefitWebCallBacksEnums.onClick.rawValue):
-                self.handleOnCancel = true
-                delegate?.onClick?()
+            case _ where url.absoluteString.contains(CallBackSchemeEnum.onClick.rawValue):
+                self.handleOnClick()
                 break
-            case _ where url.absoluteString.contains(TapBenefitWebCallBacksEnums.onCancel.rawValue):
+            case _ where url.absoluteString.contains(CallBackSchemeEnum.onCancel.rawValue):
                 if self.onSuccessURL == nil {
                     self.removeBenefitPayPopupEntry(handleOnCancel: true) {
                         self.delegate?.onCanceled?()
@@ -97,17 +98,27 @@ extension BenefitPayButton:WKNavigationDelegate {
     }
     
     
+    /// For the on click we need to display the loader view until we get a response back from the web view
+    func handleOnClick() {
+        // Make sure it is on top & visible
+        self.bringSubviewToFront(loadingView)
+        self.loadingView.isHidden = false
+        // Handle the on cancel and inform the consumer app that on click is triggered
+        self.handleOnCancel = true
+        delegate?.onClick?()
+    }
+    
     func handleOnSuccess(url:URL) {
         self.webView.isHidden = false
         if !self.removeBenefitPayAppEntry(onDismiss: {
             self.removeBenefitPayPopupEntry(handleOnCancel: false) {
                 self.delegate?.onSuccess?(data: tap_extractDataFromUrl(url, for: "data", shouldBase64Decode: true))
-                self.openUrl(url: self.currentlyLoadedCardConfigurations)
+                //self.openUrl(url: self.currentlyLoadedConfigurations)
             }
         }) {
             self.removeBenefitPayPopupEntry(handleOnCancel: false) {
                 self.delegate?.onSuccess?(data: tap_extractDataFromUrl(url, for: "data", shouldBase64Decode: true))
-                self.openUrl(url: self.currentlyLoadedCardConfigurations)
+                //self.openUrl(url: self.currentlyLoadedConfigurations)
             }
         }
     }
@@ -118,16 +129,21 @@ extension BenefitPayButton:WKNavigationDelegate {
         
         
         if !self.removeBenefitPayAppEntry(onDismiss: {
-            self.removeBenefitPayPopupEntry(handleOnCancel: false) {
+            if (self.removeBenefitPayPopupEntry(handleOnCancel: false, onDismiss: {
                 self.delegate?.onError?(data:data)
                 self.webView.isUserInteractionEnabled = true
-                self.openUrl(url: self.currentlyLoadedCardConfigurations)
+            })){} else{
+                self.delegate?.onError?(data:data)
+                self.webView.isUserInteractionEnabled = true
             }
         }) {
-            self.removeBenefitPayPopupEntry(handleOnCancel: false) {
+            if (self.removeBenefitPayPopupEntry(handleOnCancel: false) {
                 self.delegate?.onError?(data: data)
                 self.webView.isUserInteractionEnabled = true
-                self.openUrl(url: self.currentlyLoadedCardConfigurations)
+                //self.openUrl(url: self.currentlyLoadedConfigurations)
+            }){}else{
+                self.delegate?.onError?(data: data)
+                self.webView.isUserInteractionEnabled = true
             }
         }
     }
@@ -140,7 +156,7 @@ extension BenefitPayButton:WKUIDelegate {
     public func webView(_ webView: WKWebView, createWebViewWith configuration: WKWebViewConfiguration, for navigationAction: WKNavigationAction, windowFeatures: WKWindowFeatures) -> WKWebView? {
         let (viewController,web,_) = createBenefitPayWithAppPopupView()
         
-        if let url = navigationAction.request.url {
+        if let _ = navigationAction.request.url {
             web.load(navigationAction.request)
             DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(500)) {
                 //self.updateLoadingView(with: false)

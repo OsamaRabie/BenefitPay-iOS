@@ -12,6 +12,7 @@ Pod::Spec.new do |s|
   s.resources = "Sources/BenefitPay-iOS/Resources/**/*.{json,xib,pdf,png,gif,storyboard,xcassets,xcdatamodeld,lproj}"
   s.dependency'SwiftyRSA'
   s.dependency'SharedDataModels-iOS'
+  s.dependency'TapFontKit-iOS'
   s.dependency'Robin'
   
   

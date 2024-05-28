@@ -10,49 +10,23 @@ import WebKit
 import SharedDataModels_iOS
 
 /// The custom view that provides an interface for the  benefit pay button
-@objc public class BenefitPayButton: UIView {
-    /// The scheme prefix used as aprotocol between the web view and the native part
-    let tapBenefitWebSDKUrlScheme:String = "tapbenefitpaywebsdk://"
+internal class BenefitPayButton: PayButtonBaseView {
     /// The scheme prefix used by benefit pay sdk to show the benefit pay popup
     let benefitSDKUrlScheme:String = "https://benefit-checkout"
     /// The scheme prefix used by benefit pay sdk to show the benefit pay popup
     let benefitPayAppUrlScheme:String = "https://tbenefituser.page"
     /// The web view used to render the benefit pay button
     internal var webView: WKWebView = .init()
-    /// A protocol that allows integrators to get notified from events fired from benefit pay button
-    internal var delegate: BenefitPayButtonDelegate?
-    /// Defines the base url for the benefit pay sdk
-    internal static let benefitPayButtonBaseUrl:String = "https://button.dev.tap.company/wrapper/benefitpay?configurations="
     /// keeps a hold of the loaded web sdk configurations url
-    internal var currentlyLoadedCardConfigurations:URL?
+    internal var currentlyLoadedConfigurations:URL?
     /// Keeps a reference to whether or not we should handle the on cancel because it comes directly after onSuccess
     internal var handleOnCancel:Bool = true
     /// Keeps a reference to the gif loader we will display when coming back from pay with benefit pay app
     internal var benefitGifLoader:UIImageView?
     /// Holds the latest onSuccess url called when the app is in background. Will be used to call when the user focuses the app agian
     internal var onSuccessURL:URL? = nil
-    /// The headers encryption key
-    internal var headersEncryptionPublicKey:String {
-        if getBenefitPaySDKKey().contains("test") {
-            return """
------BEGIN PUBLIC KEY-----
-MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQC8AX++RtxPZFtns4XzXFlDIxPB
-h0umN4qRXZaKDIlb6a3MknaB7psJWmf2l+e4Cfh9b5tey/+rZqpQ065eXTZfGCAu
-BLt+fYLQBhLfjRpk8S6hlIzc1Kdjg65uqzMwcTd0p7I4KLwHk1I0oXzuEu53fU1L
-SZhWp4Mnd6wjVgXAsQIDAQAB
------END PUBLIC KEY-----
-"""
-        }else{
-            return """
------BEGIN PUBLIC KEY-----
-MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQC9hSRms7Ir1HmzdZxGXFYgmpi3
-ez7VBFje0f8wwrxYS9oVoBtN4iAt0DOs3DbeuqtueI31wtpFVUMGg8W7R0SbtkZd
-GzszQNqt/wyqxpDC9q+97XdXwkWQFA72s76ud7eMXQlsWKsvgwhY+Ywzt0KlpNC3
-Hj+N6UWFOYK98Xi+sQIDAQAB
------END PUBLIC KEY-----
-"""
-        }
-    }
+    /// Holds a reference to a loader to display on top of the button when clicked until charge api responds
+    internal var loadingView:UIActivityIndicatorView = .init(style: .large)
     
     //MARK: - Init methods
     override public init(frame: CGRect) {
@@ -68,6 +42,11 @@ Hj+N6UWFOYK98Xi+sQIDAQAB
     //MARK: - Private methods
     /// Used as a consolidated method to do all the needed steps upon creating the view
     private func commonInit() {
+        // Set the button type
+        payButtonType = .BenefitPay
+        // Set the loader color
+        loadingView.color = .white
+        loadingView.startAnimating()
         // Setuo the web view contais the web sdk
         setupWebView()
         // setup the constraint to put each view in its correct positiob
@@ -93,11 +72,11 @@ Hj+N6UWFOYK98Xi+sQIDAQAB
          */
     }
     
-    /// Used to open a url inside the Tap card web sdk.
+    /// Used to open a url inside the Tap button web sdk.
     /// - Parameter url: The url needed to load.
     internal func openUrl(url: URL?) {
         // Store it for further usages
-        currentlyLoadedCardConfigurations = url
+        currentlyLoadedConfigurations = url
         handleOnCancel = true
         // instruct the web view to load the needed url
         let request = URLRequest(url: url!)
@@ -108,7 +87,7 @@ Hj+N6UWFOYK98Xi+sQIDAQAB
         webView.load(request)
     }
     
-    /// used to setup the constraint of the Tap card sdk view
+    /// used to setup the constraint of the Tap button sdk view
     private func setupWebView() {
         // Creates needed configuration for the web view
         let preferences = WKPreferences()
@@ -128,6 +107,8 @@ Hj+N6UWFOYK98Xi+sQIDAQAB
         self.backgroundColor = .clear
         self.addSubview(webView)
         
+        self.addSubview(loadingView)
+        
         benefitGifLoader = benefitPayLoaderGif()
     }
     
@@ -135,7 +116,7 @@ Hj+N6UWFOYK98Xi+sQIDAQAB
     private func setupConstraints() {
         // Preprocessing needed setup
         webView.translatesAutoresizingMaskIntoConstraints = false
-        
+        loadingView.translatesAutoresizingMaskIntoConstraints = false
         // Define the web view constraints
         let top  = webView.topAnchor.constraint(equalTo: self.topAnchor)
         let left = webView.leftAnchor.constraint(equalTo: self.leftAnchor)
@@ -144,10 +125,18 @@ Hj+N6UWFOYK98Xi+sQIDAQAB
         let buttonHeight = self.heightAnchor.constraint(greaterThanOrEqualToConstant: 48)
         // SWIPE let buttonHeight = self.heightAnchor.constraint(greaterThanOrEqualToConstant: 48)
         
+        // Define the loader constraints
+        let centerX = loadingView.centerXAnchor.constraint(equalTo: self.centerXAnchor)
+        let centerY = loadingView.centerYAnchor.constraint(equalTo: self.centerYAnchor)
+        let loaderHeight = loadingView.heightAnchor.constraint(equalToConstant: 42)
+        let loaderWidth = loadingView.widthAnchor.constraint(equalToConstant: 42)
+        
         // Activate the constraints
-        NSLayoutConstraint.activate([left, right, top, bottom, buttonHeight])
+        NSLayoutConstraint.activate([left, right, top, bottom, buttonHeight, centerX, centerY, loaderHeight, loaderWidth])
         webView.layoutIfNeeded()
         webView.updateConstraints()
+        loadingView.layoutIfNeeded()
+        loadingView.updateConstraints()
         self.layoutIfNeeded()
     }
     
@@ -182,16 +171,17 @@ Hj+N6UWFOYK98Xi+sQIDAQAB
     
     
     /// Call it when you want to remove the benefitpay entry and get back to the merchant app
-    /// - Parameter shouldStopOnCancel: Whether or not, we should listen to the onCancel coming after this event or not.
-    /// - Parameter onDosmiss: a callback if needed to do some logic post closeing
-    internal func removeBenefitPayPopupEntry(handleOnCancel:Bool = false,  onDismiss:@escaping()->()) {
+    /// - Parameter handleOnCancel: Whether or not, we should listen to the onCancel coming after this event or not.
+    /// - Parameter onDismiss: a callback if needed to do some logic post closeing
+    internal func removeBenefitPayPopupEntry(handleOnCancel:Bool = false,  onDismiss:@escaping()->()) -> Bool {
         guard let viewController:UIViewController = UIApplication.shared.topViewController(),
-              viewController.restorationIdentifier == "BenefitQRVC" else { return }
+              viewController.restorationIdentifier == "BenefitQRVC" else { return false }
         benefitGifLoader?.isHidden = true
         self.addWebViewToContainerView()
         viewController.dismiss(animated: true) {
             onDismiss()
         }
+        return true
     }
     
     
@@ -199,19 +189,50 @@ Hj+N6UWFOYK98Xi+sQIDAQAB
     ///  configures the benefit pay button with the needed configurations for it to work
     ///  - Parameter config: The configurations dctionary. Recommended, as it will make you able to customly add models without updating
     ///  - Parameter delegate:A protocol that allows integrators to get notified from events fired from benefit pay button
-    @objc public func initBenefitPayButton(configDict: [String : Any], delegate: BenefitPayButtonDelegate? = nil) {
+    internal override func initPayButton(configDict: [String : Any], delegate: PayButtonDelegate? = nil) {
         self.delegate = delegate
         //let operatorModel:Operator = .init(publicKey: configDict["publicKey"] as? String ?? "", metadata: generateApplicationHeader())
         var updatedConfigurations:[String:Any] = configDict
+        URL.baseUrl = payButtonType.baseUrl()
         
-        
-        do {
-            currentlyLoadedCardConfigurations = try URL(string:generateTapBenefitPaySdkURL(from: updatedConfigurations)) ?? nil
-            updatedConfigurations["headers"] = generateApplicationHeader()
-            try openUrl(url: URL(string: generateTapBenefitPaySdkURL(from: updatedConfigurations)))
+        // We will first need to try to load the latest base url from the CDN to make sure our backend doesn't want us to look somewhere else
+        if let url = URL(string: "https://tap-sdks.b-cdn.net/mobile/benefitpay/1.0.0/base_url.json") {
+            var cdnRequest = URLRequest(url: url)
+            cdnRequest.timeoutInterval = 2
+            cdnRequest.cachePolicy = .reloadIgnoringLocalAndRemoteCacheData
+            URLSession.shared.dataTask(with: cdnRequest) { data, response, error in
+                 if let data = data {
+                     do {
+                         if let cdnResponse:[String:String] = try JSONSerialization.jsonObject(with: data, options: []) as? [String: String],
+                            let cdnBaseUrlString:String = cdnResponse["baseURL"], cdnBaseUrlString != "",
+                            let cdnBaseUrl:URL = URL(string: cdnBaseUrlString),
+                            let sandboxEncryptionKey:String = cdnResponse["testEncKey"],
+                            let productionEncryptionKey:String = cdnResponse["prodEncKey"] {
+                             URL.headersEncryptionPublicKey = productionEncryptionKey
+                             URL.baseUrl = cdnBaseUrlString
+                         }
+                     } catch {}
+                  }
+                self.postInit(configDict: configDict)
+              }.resume()
+        }else{
+            postInit(configDict: configDict)
         }
-        catch {
-            self.delegate?.onError?(data: "{error:\(error.localizedDescription)}")
+    }
+    
+    
+    private func postInit(configDict: [String : Any]) {
+        var updatedConfigurations:[String:Any] = configDict
+        DispatchQueue.main.async {
+            do {
+                self.currentlyLoadedConfigurations = try URL(string:UrlBasedUtils.generatePayButtonSdkURL(from: updatedConfigurations, payButtonType: self.payButtonType)) ?? nil
+                updatedConfigurations["headers"] = UrlBasedUtils.generateApplicationHeader(headersEncryptionPublicKey: URL.headersEncryptionPublicKey)
+                updatedConfigurations["redirect"] = ["url":self.payButtonType.tapRedirectionSchemeUrl()]
+                try self.openUrl(url: URL(string: UrlBasedUtils.generatePayButtonSdkURL(from: updatedConfigurations, payButtonType: self.payButtonType)))
+            }
+            catch {
+                self.delegate?.onError?(data: "{error:\(error.localizedDescription)}")
+            }
         }
     }
 }

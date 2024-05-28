@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="22154" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" launchScreen="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="01J-lp-oVM">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="22505" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" launchScreen="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="01J-lp-oVM">
     <device id="retina6_12" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="22130"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="22504"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
@@ -18,30 +18,20 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="CUp-jM-oZQ">
-                                <rect key="frame" x="39.666666666666657" y="79" width="314" height="59"/>
+                                <rect key="frame" x="39.666666666666657" y="396.66666666666669" width="314" height="59"/>
                                 <string key="text">Simplifying Payments
 BenefitPay-iOS Example App</string>
                                 <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="25"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" alpha="0.75" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="benefit_pay" translatesAutoresizingMaskIntoConstraints="NO" id="xgG-7u-tW2">
-                                <rect key="frame" x="20" y="753" width="353" height="45"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="45" id="JMz-pG-jYx"/>
-                                </constraints>
-                            </imageView>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
-                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="xgG-7u-tW2" secondAttribute="trailing" constant="20" id="3gB-5O-swH"/>
-                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="xgG-7u-tW2" secondAttribute="bottom" constant="20" id="6HP-80-xgV"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="CUp-jM-oZQ" secondAttribute="trailing" id="8Ml-jp-3ft"/>
                             <constraint firstItem="CUp-jM-oZQ" firstAttribute="centerX" secondItem="Ze5-6b-2t3" secondAttribute="centerX" id="E7i-5D-g3p"/>
-                            <constraint firstItem="xgG-7u-tW2" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="20" id="Oah-Sv-mgr"/>
-                            <constraint firstItem="xgG-7u-tW2" firstAttribute="centerX" secondItem="Ze5-6b-2t3" secondAttribute="centerX" id="PPz-Gn-3Pd"/>
-                            <constraint firstItem="CUp-jM-oZQ" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" constant="20" id="iSy-qj-dWl"/>
+                            <constraint firstItem="CUp-jM-oZQ" firstAttribute="centerY" secondItem="Ze5-6b-2t3" secondAttribute="centerY" id="g5d-dV-in3"/>
                             <constraint firstItem="CUp-jM-oZQ" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="vLJ-ZN-0w9"/>
                         </constraints>
                     </view>
@@ -52,7 +42,6 @@ BenefitPay-iOS Example App</string>
         </scene>
     </scenes>
     <resources>
-        <image name="benefit_pay" width="358" height="64"/>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
         </systemColor>

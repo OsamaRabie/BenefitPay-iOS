@@ -17,18 +17,19 @@ let package = Package(
         .package(url: "https://github.com/TakeScoop/SwiftyRSA.git", from: "1.0.0"),
         .package(url: "https://github.com/Tap-Payments/SharedDataModels-iOS.git", from: "0.0.1"),
         .package(url: "https://github.com/ahmdx/Robin", from: "0.98.0"),
-    ],
+        .package(url: "https://github.com/Tap-Payments/TapFontKit-iOS.git", from: "0.0.1"),
+    ], 
     targets: [
         // Targets are the basic building blocks of a package, defining a module or a test suite.
         // Targets can depend on other targets in this package and products from dependencies.
-        .target(
+        .target( 
             name: "BenefitPay-iOS",
             dependencies: ["SwiftyRSA",
                            "Robin",
+                           "TapFontKit-iOS",
                           "SharedDataModels-iOS"],
-            resources: [.copy("Resources/Close.png"),
-                        .copy("Resources/BenefitLoader.gif"),
-                        .process("Resources/TapBenefitPayMedia.xcassets")]
+            resources: [.copy("Resources/BenefitLoader.gif"),
+                        .process("Resources/PayButtonMedia.xcassets")]
         ),
         .testTarget(
             name: "BenefitPay-iOSTests",

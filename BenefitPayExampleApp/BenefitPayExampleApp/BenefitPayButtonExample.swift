@@ -10,44 +10,52 @@ import Toast
 import CryptoKit
 
 class BenefitPayButtonExample: UIViewController {
-    @IBOutlet weak var benefitPayButton: BenefitPayButton!
+    @IBOutlet weak var benefitPayButton: PayButtonView!
     @IBOutlet weak var eventsTextView: UITextView!
     
+    var selectedButtonType:PayButtonTypeEnum = .BenefitPay
     
-    
-    var dictConfig:[String:Any] = ["operator":["publicKey":"pk_test_HJN863LmO15EtDgo9cqK7sjS","hashString":BenefitPayButtonExample.generateTapHashString(publicKey: "pk_test_HJN863LmO15EtDgo9cqK7sjS", secretKey: "sk_test_Iep2c1RCtrTE8BMPVwzi4UxF", amount: 0.1, currency: "BHD", postUrl: "", transactionReference: "trx")],
-                                   "scope":"charge",
-                                   "transaction":["reference":"trx",
-                                                  "authorize":[
-                                                    "type":"VOID",
-                                                    "time":12
-                                                  ]],
-                                   "order":["id":"",
-                                            "amount":0.1,
-                                            "currency":"BHD",
-                                            "description": "Authentication description",
-                                            "reference":"ordRef",
-                                            "metadata":[:]],
-                                   "invoice":["id":""],
-                                   "merchant":["id":""],
-                                   "customer":["id":"",
-                                               "name":[["lang":"en","first":"TAP","middle":"","last":"PAYMENTS"]],
-                                               "contact":["email":"tap@tap.company",
-                                                          "phone":["countryCode":"+965","number":"88888888"]]],
-                                   "interface":["locale": "en",
-                                                "theme": UIView().traitCollection.userInterfaceStyle == .dark ? "dark": "light",
-                                                "edges": "curved",
-                                                "colorStyle":UIView().traitCollection.userInterfaceStyle == .dark ? "monochrome": "colored",
-                                                "loader": true],
-                                   "post":["url":""]]
+    var dictConfig:[String:Any] = [
+        "operator": ["publicKey": "pk_test_YhUjg9PNT8oDlKJ1aE2fMRz7", "hashString": ""],
+        "transaction": [
+            "amount":0.1,
+            "currency":"BHD"
+        ],
+        "reference":[
+            "transaction":"transaction",
+            "order":"order"
+        ],
+        "merchant": ["id": ""],
+        "customer": [
+          "id": "",
+          "names": [["lang": "en", "first": "TAP", "middle": "", "last": "PAYMENTS"]],
+          "contact": [
+            "email": "tap@tap.company",
+            "phone": ["countryCode": "+965", "number": "88888888"],
+          ],
+        ],
+        "interface": [
+          "locale": "en",
+          "edges": "circular",
+        ],
+        "post": ["url": ""],
+    ] {
+        didSet {
+            //generateHashString()
+        }
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
         setupBenfitPayButton()
+        if let jsonData = try? JSONSerialization.data(withJSONObject: dictConfig, options: .prettyPrinted) {
+            print(String(decoding: jsonData, as: UTF8.self))
+         }
     }
 
     func setupBenfitPayButton() {
-        benefitPayButton.initBenefitPayButton(configDict: self.dictConfig, delegate: self)
+        //generateHashString()
+        benefitPayButton.initPayButton(configDict: self.dictConfig, delegate: self, payButtonType: selectedButtonType)
     }
     
     @IBAction func optionsClicked(_ sender: Any) {
@@ -76,7 +84,6 @@ class BenefitPayButtonExample: UIViewController {
         self.navigationController?.pushViewController(configCtrl, animated: true)
         
     }
-    
     
     /**
          This is a helper method showing how can you generate a hash string when performing live charges
@@ -112,32 +119,27 @@ class BenefitPayButtonExample: UIViewController {
 
 
 extension BenefitPayButtonExample: BenefitPayButtonSettingsViewControllerDelegate {
-    
-    func updateConfig(config: [String:Any]) {
+    func updateConfig(config: [String : Any], selectedButtonType: BenefitPay_iOS.PayButtonTypeEnum) {
         self.dictConfig = config
         setupBenfitPayButton()
     }
 }
 
-extension BenefitPayButtonExample: BenefitPayButtonDelegate {
+extension BenefitPayButtonExample: PayButtonDelegate {
     
     func onError(data: String) {
         //print("CardWebSDKExample onError \(data)")
         eventsTextView.text = "\n\n========\n\nonError \(data)\(eventsTextView.text ?? "")"
+        self.view.isUserInteractionEnabled = true
     }
     
     func onSuccess(data: String) {
         //print("CardWebSDKExample onError \(data)")
-        eventsTextView.text = "\n\n========\n\nonSuccess \(data)\(eventsTextView.text ?? "")"
         if let json = try? JSONSerialization.jsonObject(with: Data(data.utf8), options: .mutableContainers),
            let jsonData = try? JSONSerialization.data(withJSONObject: json, options: .prettyPrinted) {
-            let controller:OnSuccessViewController = storyboard?.instantiateViewController(withIdentifier: "OnSuccessViewController") as! OnSuccessViewController
-            controller.string = String(decoding: jsonData, as: UTF8.self)
-            DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(1)) {
-                self.present(controller, animated: true, completion: nil)
-            }
+            eventsTextView.text = "\n\n========\n\nonSuccess \(String(decoding: jsonData, as: UTF8.self))\(eventsTextView.text ?? "")"
         } else {
-            print("json data malformed")
+            eventsTextView.text = "\n\n========\n\nonSuccess \(data)\(eventsTextView.text ?? "")"
         }
     }
     
@@ -154,15 +156,20 @@ extension BenefitPayButtonExample: BenefitPayButtonDelegate {
     func onReady(){
         //print("CardWebSDKExample onReady")
         eventsTextView.text = "\n\n========\n\nonReady\(eventsTextView.text ?? "")"
+        self.view.isUserInteractionEnabled = true
     }
     
-    func onClicked() {
+    func onClick() {
         //print("CardWebSDKExample onFocus")
         eventsTextView.text = "\n\n========\n\nonClicked\(eventsTextView.text ?? "")"
     }
     
     func onCanceled() {
         eventsTextView.text = "\n\n========\n\nonCanceled\(eventsTextView.text ?? "")"
+    }
+    
+    func onBinIdentification(data: String) {
+        eventsTextView.text = "\n\n========\n\nonBinIdentification \(data)\(eventsTextView.text ?? "")"
     }
 }
 

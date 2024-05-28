@@ -10,19 +10,20 @@ import UIKit
 import CoreTelephony
 import SharedDataModels_iOS
 
-internal extension BenefitPayButton {
+internal class UrlBasedUtils {
     //MARK: - Generate tap card sdk url methods
     
     ///  Generates a card sdk url with correctly encoded values
     ///  - Parameter from configurations: the Dictionaty configurations to be url encoded
-    func generateTapBenefitPaySdkURL(from configuration: [String : Any]) throws -> String {
+    ///  - Parameter payButtonType: The type you want to generate a url for
+    static func generatePayButtonSdkURL(from configuration: [String : Any], payButtonType:PayButtonTypeEnum) throws -> String {
         do {
             // Make sure we have a valid string:any dictionaty
             let data = try JSONSerialization.data(withJSONObject: configuration, options: .prettyPrinted)
             let jsonString = NSString(data: data, encoding: NSUTF8StringEncoding)
             // ul encode the generated string
             let urlEncodedJson = jsonString!.addingPercentEncoding(withAllowedCharacters: .urlFragmentAllowed)
-            let urlString = "\(BenefitPayButton.benefitPayButtonBaseUrl)\(urlEncodedJson!)"
+            let urlString = "\(URL.baseUrl)\(urlEncodedJson!)"
             return urlString
         }
         catch {
@@ -32,28 +33,31 @@ internal extension BenefitPayButton {
     
     ///  Generates a card sdk url with correctly encoded values
     ///  - Parameter from configurations: the String configurations to be url encoded
-    func generateTapBenefitPaySdkURL(from configuration: String) -> String {
+    ///  - Parameter payButtonType: The type you want to generate a url for
+    static func generatePayButtonSdkURL(from configuration: String, payButtonType:PayButtonTypeEnum) -> String {
         let urlEncodedJson = configuration.addingPercentEncoding(withAllowedCharacters: .urlFragmentAllowed)
         // ul encode the generated string
-        return "\(BenefitPayButton.benefitPayButtonBaseUrl)\(urlEncodedJson!)"
+        return "\(URL.baseUrl)\(urlEncodedJson!)"
     }
     
     //MARK: - Network's headers
     
     /// Generates the mdn & the application required headers
-    func generateApplicationHeader() -> [String:String] {
+    /// - Parameter headersEncryptionPublicKey: The encryption key to be used
+    static func generateApplicationHeader(headersEncryptionPublicKey:String) -> [String:String] {
         return [
-            Constants.HTTPHeaderKey.application: applicationHeaderValue,
-            Constants.HTTPHeaderKey.mdn: Crypter.encrypt(TapApplicationPlistInfo.shared.bundleIdentifier ?? "", using: headersEncryptionPublicKey) ?? ""
+            Constants.HTTPHeaderKey.application: applicationHeaderValue(headersEncryptionPublicKey: headersEncryptionPublicKey),
+            Constants.HTTPHeaderKey.mdn: Crypter.encrypt("https://button.dev.tap.company"/*TapApplicationPlistInfo.shared.bundleIdentifier ?? ""*/, using: headersEncryptionPublicKey) ?? ""
         ]
     }
     
     
     
     /// HTTP headers that contains the device and app info
-    private var applicationHeaderValue: String {
+    /// - Parameter headersEncryptionPublicKey: The encryption key to be used
+    static private func applicationHeaderValue(headersEncryptionPublicKey:String) -> String {
         
-        var applicationDetails = applicationStaticDetails()
+        var applicationDetails = applicationStaticDetails(headersEncryptionPublicKey: headersEncryptionPublicKey)
         
         let localeIdentifier = "en"
         
@@ -66,7 +70,8 @@ internal extension BenefitPayButton {
     }
     
     /// A computed variable that generates at access time the required static headers by the server.
-    func applicationStaticDetails() -> [String: String] {
+    /// - Parameter headersEncryptionPublicKey: The encryption key to be used
+    static func applicationStaticDetails(headersEncryptionPublicKey:String) -> [String: String] {
         
         /*guard let bundleID = TapApplicationPlistInfo.shared.bundleIdentifier, !bundleID.isEmpty else {
          
@@ -76,7 +81,6 @@ internal extension BenefitPayButton {
         let bundleID = TapApplicationPlistInfo.shared.bundleIdentifier ?? ""
         
         let sdkPlistInfo = TapBundlePlistInfo(bundle: Bundle(for: BenefitPayButton.self))
-        
         guard let requirerVersion = sdkPlistInfo.shortVersionString, !requirerVersion.isEmpty else {
             
             fatalError("Seems like SDK is not integrated well.")
