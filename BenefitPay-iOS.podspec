@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name             = 'BenefitPay-iOS'
-  s.version          = '0.0.3'
+  s.version          = '0.0.4'
   s.summary          = 'From the shelf pay with benefit pay button by Tap Payments'
   s.homepage         = 'https://github.com/Tap-Payments/BenefitPay-iOS'
   s.license          = { :type => 'MIT', :file => 'LICENSE' }

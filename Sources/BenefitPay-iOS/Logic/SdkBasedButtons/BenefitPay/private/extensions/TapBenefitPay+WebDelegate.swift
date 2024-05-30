@@ -60,7 +60,6 @@ extension BenefitPayButton:WKNavigationDelegate {
                 self.removeBenefitPayPopupEntry(handleOnCancel: true) {
                     DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(3)) {
                         guard !BenefitPayButton.onSuccessCalled else {
-                            BenefitPayButton.onSuccessCalled = false
                             return
                         }
                         self.delegate?.onCanceled?()
@@ -119,7 +118,6 @@ extension BenefitPayButton:WKNavigationDelegate {
             if (self.removeBenefitPayPopupEntry(handleOnCancel: false, onDismiss: {
                 DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(3)) {
                     guard !BenefitPayButton.onSuccessCalled else {
-                        BenefitPayButton.onSuccessCalled = false
                         return
                     }
                     self.delegate?.onError?(data:data)
@@ -128,7 +126,6 @@ extension BenefitPayButton:WKNavigationDelegate {
             })){} else{
                 DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(3)) {
                     guard !BenefitPayButton.onSuccessCalled else {
-                        BenefitPayButton.onSuccessCalled = false
                         return
                     }
                     self.delegate?.onError?(data:data)
@@ -139,7 +136,6 @@ extension BenefitPayButton:WKNavigationDelegate {
             if (self.removeBenefitPayPopupEntry(handleOnCancel: false) {
                 DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(3)) {
                     guard !BenefitPayButton.onSuccessCalled else {
-                        BenefitPayButton.onSuccessCalled = false
                         return
                     }
                     self.delegate?.onError?(data:data)
@@ -149,7 +145,6 @@ extension BenefitPayButton:WKNavigationDelegate {
             }){}else{
                 DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(3)) {
                     guard !BenefitPayButton.onSuccessCalled else {
-                        BenefitPayButton.onSuccessCalled = false
                         return
                     }
                     self.delegate?.onError?(data:data)
