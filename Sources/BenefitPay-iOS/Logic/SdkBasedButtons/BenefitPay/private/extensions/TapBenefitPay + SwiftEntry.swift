@@ -68,8 +68,7 @@ internal extension BenefitPayButton {
     func createBenefitPayPopUpView() -> UIViewController {
         // The container iew
         let view:UIView = .init()
-        view.backgroundColor = .clear
-        
+        view.backgroundColor = .black
         //webView.isHidden = true
         webView.removeFromSuperview()
         view.addSubview(webView)
@@ -86,7 +85,7 @@ internal extension BenefitPayButton {
         let left = webView.leftAnchor.constraint(equalTo: view.leftAnchor)
         let right = webView.rightAnchor.constraint(equalTo: view.rightAnchor)
         let bottom = webView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
-        
+       
         // Define the constraints of the loader to be centered
         let loaderCenterY  = benefitGifLoader!.centerYAnchor.constraint(equalTo: view.centerYAnchor)
         let loaderCenterX = benefitGifLoader!.centerXAnchor.constraint(equalTo: view.centerXAnchor)
@@ -101,8 +100,8 @@ internal extension BenefitPayButton {
         
         
         let ctr:UIViewController = .init()
-        ctr.view.backgroundColor = .clear
-        ctr.modalPresentationStyle = .overCurrentContext
+        ctr.view.backgroundColor = .red
+        ctr.modalPresentationStyle = .fullScreen
         ctr.view.addSubview(view)
         ctr.restorationIdentifier = "BenefitQRVC"
         view.translatesAutoresizingMaskIntoConstraints = false
@@ -201,7 +200,7 @@ internal extension BenefitPayButton {
         return nil
     }
     
-    func showGifLoader(show:Bool) {
+    /*func showGifLoader(show:Bool) {
         if(show) {
             self.webView.isUserInteractionEnabled = false
             self.benefitGifLoader?.isHidden = false
@@ -217,5 +216,5 @@ internal extension BenefitPayButton {
             self.benefitGifLoader?.isHidden = true
             self.webView.isUserInteractionEnabled = true
         }
-    }
+    }*/
 }

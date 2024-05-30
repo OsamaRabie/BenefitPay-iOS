@@ -23,10 +23,10 @@ internal class BenefitPayButton: PayButtonBaseView {
     internal var handleOnCancel:Bool = true
     /// Keeps a reference to the gif loader we will display when coming back from pay with benefit pay app
     internal var benefitGifLoader:UIImageView?
-    /// Holds the latest onSuccess url called when the app is in background. Will be used to call when the user focuses the app agian
-    internal var onSuccessURL:URL? = nil
     /// Holds a reference to a loader to display on top of the button when clicked until charge api responds
     internal var loadingView:UIActivityIndicatorView = .init(style: .large)
+    /// Declares if we recieved an onSuccess
+    internal static var onSuccessCalled:Bool = false
     
     //MARK: - Init methods
     override public init(frame: CGRect) {
@@ -45,7 +45,7 @@ internal class BenefitPayButton: PayButtonBaseView {
         // Set the button type
         payButtonType = .BenefitPay
         // Set the loader color
-        loadingView.color = .white
+        loadingView.color = .gray
         loadingView.startAnimating()
         // Setuo the web view contais the web sdk
         setupWebView()
@@ -62,7 +62,7 @@ internal class BenefitPayButton: PayButtonBaseView {
         // First, check if the current screen is the paywithebenefitpayapp popup, then we remove it and show the loader on the pay qith benefit qr popup
         if !removeBenefitPayAppEntry() {
             // This means, we are already in the pay with benefit qr ode and we only need to how the loader maybe the chrge will be updated
-            showGifLoader(show: true)
+            //showGifLoader(show: true)
         }
         /*
          // SWIPE Now let us check if the benefitpay app popup is displayed
@@ -95,7 +95,8 @@ internal class BenefitPayButton: PayButtonBaseView {
         preferences.javaScriptCanOpenWindowsAutomatically = true
         let configuration = WKWebViewConfiguration()
         configuration.defaultWebpagePreferences.preferredContentMode = .desktop
-        
+        configuration.setURLSchemeHandler(self, forURLScheme: "tapBenefitPayWebSDK");
+
         webView = WKWebView(frame: .zero, configuration: configuration)
         // Let us make sure it is of a clear background and opaque, not to interfer with the merchant's app background
         webView.isOpaque = false
@@ -160,7 +161,7 @@ internal class BenefitPayButton: PayButtonBaseView {
         
         // If this is the pay with benefitpayapp popup page, we need to go back to the benefitPay page and show the loader
         topMostVC.dismiss(animated: true) {
-            self.showGifLoader(show: true)
+            //self.showGifLoader(show: true)
             onDismiss()
         }
         return true
@@ -235,4 +236,28 @@ internal class BenefitPayButton: PayButtonBaseView {
             }
         }
     }
+}
+
+
+extension BenefitPayButton:WKURLSchemeHandler {
+    func webView(_ webView: WKWebView, start urlSchemeTask: WKURLSchemeTask) {
+           print("Function: \(#function), line: \(#line)")
+           print("==> \(urlSchemeTask.request.url?.absoluteString ?? "")\n")
+
+       // You can find the url pattern by using urlSchemeTask.request.url. and create NSData from your local resource and send the data using 3 delegate method like done below.
+       // You can also call server api from this native code and return the data to the task.
+       // You can also cache the data coming from server and use it during offline access of this html.
+       // When you are returning html the the mime type should be 'text/html'. When you are trying to return Json data then we should change the mime type to 'application/json'.
+       // For returning json data you need to return NSHTTPURLResponse which has base classs of NSURLResponse with status code 200.
+
+       // Handle WKURLSchemeTask delegate methods
+          
+       }
+
+       func webView(_ webView: WKWebView, stop urlSchemeTask: WKURLSchemeTask) {
+           print("Function: \(#function), line: \(#line)")
+           print("==> \(urlSchemeTask.request.url?.absoluteString ?? "")\n")
+       }
+    
+    
 }

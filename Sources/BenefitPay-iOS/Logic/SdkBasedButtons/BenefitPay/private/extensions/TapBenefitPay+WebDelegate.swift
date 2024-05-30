@@ -25,19 +25,19 @@ extension BenefitPayButton:WKNavigationDelegate {
         
         guard let url = navigationAction.request.url else { return }
         
-        if url.absoluteString.hasPrefix(payButtonType.webSdkScheme()) {
-            print("navigationAction", url.absoluteString)
+        if url.absoluteString.lowercased().hasPrefix(payButtonType.webSdkScheme()) {
+            print("navigationAction1", url.absoluteString)
             action = .cancel
         }else{
-            print("navigationAction", url.absoluteString)
+            print("navigationAction2", url.absoluteString)
         }
         // In all cases when we get a feedback from the web view we will need to hide the loader if it is being displayed
-        self.loadingView.isHidden = true
         // Let us see if the web sdk is telling us something
-        if( url.absoluteString.contains(payButtonType.webSdkScheme())) {
+        if( url.absoluteString.lowercased().contains(payButtonType.webSdkScheme())) {
             switch url.absoluteString {
             case _ where url.absoluteString.contains(CallBackSchemeEnum.onError.rawValue):
                 self.handleOnError(data: tap_extractDataFromUrl(url, for: "data", shouldBase64Decode: true))
+                self.loadingView.isHidden = true
                 break
             case _ where url.absoluteString.contains(CallBackSchemeEnum.onOrderCreated.rawValue):
                 delegate?.onOrderCreated?(data: tap_extractDataFromUrl(url, for: "data", shouldBase64Decode: false))
@@ -46,38 +46,23 @@ extension BenefitPayButton:WKNavigationDelegate {
                 delegate?.onChargeCreated?(data: tap_extractDataFromUrl(url, for: "data", shouldBase64Decode: true))
                 break
             case _ where url.absoluteString.contains(CallBackSchemeEnum.onSuccess.rawValue):
-                
-                let notificationContent = UNMutableNotificationContent()
-                   notificationContent.title = "Payment updated"
-                   notificationContent.body = "Return to \(Bundle.main.infoDictionary?[kCFBundleNameKey as String] as? String ?? "the app") to complete your transaction."
-                let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 0.5,
-                                                                    repeats: false)
-                    let request = UNNotificationRequest(identifier: "testNotification",
-                                                        content: notificationContent,
-                                                        trigger: trigger)
-                
-                UNUserNotificationCenter.current().add(request) { (error) in
-                        if let error = error {
-                            print("Notification Error: ", error)
-                        }
-                    }
-                // If app is in background we will not do anything and will save the data onSuccess so when he focuses again, we dispatch the event
-                if UIApplication.shared.applicationState == .active {
-                    self.handleOnSuccess(url:url)
-                }else{
-                    self.webView.isHidden = true
-                    self.onSuccessURL = url
-                }
+                self.handleOnSuccess(url:url)
                 break
             case _ where url.absoluteString.contains(CallBackSchemeEnum.onReady.rawValue):
+                self.loadingView.isHidden = true
                 delegate?.onReady?()
                 break
             case _ where url.absoluteString.contains(CallBackSchemeEnum.onClick.rawValue):
                 self.handleOnClick()
                 break
             case _ where url.absoluteString.contains(CallBackSchemeEnum.onCancel.rawValue):
-                if self.onSuccessURL == nil {
-                    self.removeBenefitPayPopupEntry(handleOnCancel: true) {
+                self.loadingView.isHidden = true
+                self.removeBenefitPayPopupEntry(handleOnCancel: true) {
+                    DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(3)) {
+                        guard !BenefitPayButton.onSuccessCalled else {
+                            BenefitPayButton.onSuccessCalled = false
+                            return
+                        }
                         self.delegate?.onCanceled?()
                     }
                 }
@@ -105,10 +90,12 @@ extension BenefitPayButton:WKNavigationDelegate {
         self.loadingView.isHidden = false
         // Handle the on cancel and inform the consumer app that on click is triggered
         self.handleOnCancel = true
+        BenefitPayButton.onSuccessCalled = false
         delegate?.onClick?()
     }
     
     func handleOnSuccess(url:URL) {
+        BenefitPayButton.onSuccessCalled = true
         self.webView.isHidden = false
         if !self.removeBenefitPayAppEntry(onDismiss: {
             self.removeBenefitPayPopupEntry(handleOnCancel: false) {
@@ -116,8 +103,8 @@ extension BenefitPayButton:WKNavigationDelegate {
                 //self.openUrl(url: self.currentlyLoadedConfigurations)
             }
         }) {
+            self.delegate?.onSuccess?(data: tap_extractDataFromUrl(url, for: "data", shouldBase64Decode: true))
             self.removeBenefitPayPopupEntry(handleOnCancel: false) {
-                self.delegate?.onSuccess?(data: tap_extractDataFromUrl(url, for: "data", shouldBase64Decode: true))
                 //self.openUrl(url: self.currentlyLoadedConfigurations)
             }
         }
@@ -130,19 +117,43 @@ extension BenefitPayButton:WKNavigationDelegate {
         
         if !self.removeBenefitPayAppEntry(onDismiss: {
             if (self.removeBenefitPayPopupEntry(handleOnCancel: false, onDismiss: {
-                self.delegate?.onError?(data:data)
+                DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(3)) {
+                    guard !BenefitPayButton.onSuccessCalled else {
+                        BenefitPayButton.onSuccessCalled = false
+                        return
+                    }
+                    self.delegate?.onError?(data:data)
+                }
                 self.webView.isUserInteractionEnabled = true
             })){} else{
-                self.delegate?.onError?(data:data)
+                DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(3)) {
+                    guard !BenefitPayButton.onSuccessCalled else {
+                        BenefitPayButton.onSuccessCalled = false
+                        return
+                    }
+                    self.delegate?.onError?(data:data)
+                }
                 self.webView.isUserInteractionEnabled = true
             }
         }) {
             if (self.removeBenefitPayPopupEntry(handleOnCancel: false) {
-                self.delegate?.onError?(data: data)
+                DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(3)) {
+                    guard !BenefitPayButton.onSuccessCalled else {
+                        BenefitPayButton.onSuccessCalled = false
+                        return
+                    }
+                    self.delegate?.onError?(data:data)
+                }
                 self.webView.isUserInteractionEnabled = true
                 //self.openUrl(url: self.currentlyLoadedConfigurations)
             }){}else{
-                self.delegate?.onError?(data: data)
+                DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(3)) {
+                    guard !BenefitPayButton.onSuccessCalled else {
+                        BenefitPayButton.onSuccessCalled = false
+                        return
+                    }
+                    self.delegate?.onError?(data:data)
+                }
                 self.webView.isUserInteractionEnabled = true
             }
         }
