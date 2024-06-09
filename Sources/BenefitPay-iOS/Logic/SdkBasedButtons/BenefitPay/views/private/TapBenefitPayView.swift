@@ -45,7 +45,8 @@ internal class BenefitPayButton: PayButtonBaseView {
         // Set the button type
         payButtonType = .BenefitPay
         // Set the loader color
-        loadingView.color = .gray
+        loadingView.alpha = 0
+        loadingView.color = .clear
         loadingView.startAnimating()
         // Setuo the web view contais the web sdk
         setupWebView()
