@@ -51,10 +51,10 @@ class BenefitPayButtonSettingsViewController: FormViewController {
         form +++ Section("operator")
         <<< AlertRow<String>("operator.publicKey"){ row in
             row.title = "Tap public key"
-            row.options = ["pk_test_Wa4ju8UC1zoi0HhST9yO3M6n","pk_live_Q4EYIh0BJe17uDwtGV2CsT8X"]
-            row.value = (config! as NSDictionary).value(forKeyPath: "operator.publicKey") as? String ?? "pk_test_Wa4ju8UC1zoi0HhST9yO3M6n"
+            row.options = ["pk_test_Nfq0mjd8wAL29cJp4kbiEXMF","pk_live_3zIsCFeStGLv8DNd9m054bYc"]
+            row.value = (config! as NSDictionary).value(forKeyPath: "operator.publicKey") as? String ?? "pk_test_Nfq0mjd8wAL29cJp4kbiEXMF"
             row.onChange { row in
-                self.update(dictionary: &self.config!, at: ["operator","publicKey"], with: row.value ?? "pk_test_Wa4ju8UC1zoi0HhST9yO3M6n")
+                self.update(dictionary: &self.config!, at: ["operator","publicKey"], with: row.value ?? "pk_test_Nfq0mjd8wAL29cJp4kbiEXMF")
             }
         }
         
@@ -118,6 +118,26 @@ class BenefitPayButtonSettingsViewController: FormViewController {
                self.update(dictionary: &self.config!, at: ["customer","id"], with: row.value ?? "")
            }
        }
+        
+        form +++ Section("Reference")
+       
+       <<< TextRow("reference.order"){ row in
+           row.title = "Reference order"
+           row.placeholder = "Enter order's reference"
+           row.value = (config! as NSDictionary).value(forKeyPath: "reference.order") as? String ?? ""
+           row.onChange { row in
+               self.update(dictionary: &self.config!, at: ["reference","order"], with: row.value ?? "")
+           }
+       }
+        
+        <<< TextRow("reference.transaction"){ row in
+            row.title = "Reference transaction"
+            row.placeholder = "Enter transaction's reference"
+            row.value = (config! as NSDictionary).value(forKeyPath: "reference.transaction") as? String ?? ""
+            row.onChange { row in
+                self.update(dictionary: &self.config!, at: ["reference","transaction"], with: row.value ?? "")
+            }
+        }
         
         form +++ Section("interface")
         <<< AlertRow<String>("interface.locale"){ row in

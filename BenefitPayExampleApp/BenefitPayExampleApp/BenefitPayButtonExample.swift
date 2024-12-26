@@ -16,14 +16,16 @@ class BenefitPayButtonExample: UIViewController {
     var selectedButtonType:PayButtonTypeEnum = .BenefitPay
     
     var dictConfig:[String:Any] = [
-        "operator": ["publicKey": "pk_test_YhUjg9PNT8oDlKJ1aE2fMRz7", "hashString": ""],
+        "operator": ["publicKey": "pk_live_3zIsCFeStGLv8DNd9m054bYc", "hashString": ""],
+        //"debug":true,
+        //"data-testid": "TapButton",
         "transaction": [
-            "amount":0.1,
-            "currency":"BHD"
+            "amount": 0.1,
+            "currency": "BHD"
         ],
-        "reference":[
-            "transaction":"transaction",
-            "order":"order"
+        "reference": [
+            "order":"ord",
+            "transaction":"trans"
         ],
         "merchant": ["id": ""],
         "customer": [
@@ -36,10 +38,11 @@ class BenefitPayButtonExample: UIViewController {
         ],
         "interface": [
           "locale": "en",
-          "edges": "circular",
+          "edges": "curved" // straight
         ],
-        "post": ["url": ""],
-    ] {
+        //"post": ["url": ""],
+        "metadata": ["": ""],
+      ] {
         didSet {
             //generateHashString()
         }

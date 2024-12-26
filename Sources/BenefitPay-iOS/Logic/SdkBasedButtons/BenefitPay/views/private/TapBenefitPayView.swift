@@ -18,7 +18,7 @@ internal class BenefitPayButton: PayButtonBaseView {
     /// The web view used to render the benefit pay button
     internal var webView: WKWebView = .init()
     /// keeps a hold of the loaded web sdk configurations url
-    internal var currentlyLoadedConfigurations:URL?
+    internal var currentlyLoadedConfigurations:[String:Any]?
     /// Keeps a reference to whether or not we should handle the on cancel because it comes directly after onSuccess
     internal var handleOnCancel:Bool = true
     /// Keeps a reference to the gif loader we will display when coming back from pay with benefit pay app
@@ -27,6 +27,30 @@ internal class BenefitPayButton: PayButtonBaseView {
     internal var loadingView:UIActivityIndicatorView = .init(style: .large)
     /// Declares if we recieved an onSuccess
     internal static var onSuccessCalled:Bool = false
+    /// The public key to use in case of sandbox transaction
+    internal static var sandboxEncryptionKey:String = """
+-----BEGIN PUBLIC KEY-----
+MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQC9hSRms7Ir1HmzdZxGXFYgmpi3
+ez7VBFje0f8wwrxYS9oVoBtN4iAt0DOs3DbeuqtueI31wtpFVUMGg8W7R0SbtkZd
+GzszQNqt/wyqxpDC9q+97XdXwkWQFA72s76ud7eMXQlsWKsvgwhY+Ywzt0KlpNC3
+Hj+N6UWFOYK98Xi+sQIDAQAB
+-----END PUBLIC KEY-----
+"""
+    /// The public key to use in case of production transaction
+    internal static var productionEncryptionKey:String = """
+-----BEGIN PUBLIC KEY-----
+MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQC9hSRms7Ir1HmzdZxGXFYgmpi3
+ez7VBFje0f8wwrxYS9oVoBtN4iAt0DOs3DbeuqtueI31wtpFVUMGg8W7R0SbtkZd
+GzszQNqt/wyqxpDC9q+97XdXwkWQFA72s76ud7eMXQlsWKsvgwhY+Ywzt0KlpNC3
+Hj+N6UWFOYK98Xi+sQIDAQAB
+-----END PUBLIC KEY-----
+"""
+    /// The Url to decide if this is the man in the middle page that we need to skip
+    internal static var benefitPayFireBaseURL:String = "https://preview.page.link/benefituser.page.link"
+    /// The Url to decide if this is the man in the middle page that we need to skip
+    internal static var javaScriptCodeToSkipManInTheMiddle:String = "document.getElementById('pzc6ed').click();"
+    /// The wrapper base url
+    internal static var baseURL:String = "https://mw-sdk.beta.tap.company/v2/button/config"
     
     //MARK: - Init methods
     override public init(frame: CGRect) {
@@ -77,7 +101,7 @@ internal class BenefitPayButton: PayButtonBaseView {
     /// - Parameter url: The url needed to load.
     internal func openUrl(url: URL?) {
         // Store it for further usages
-        currentlyLoadedConfigurations = url
+        //currentlyLoadedConfigurations = url
         handleOnCancel = true
         // instruct the web view to load the needed url
         let request = URLRequest(url: url!)
@@ -191,11 +215,15 @@ internal class BenefitPayButton: PayButtonBaseView {
     ///  configures the benefit pay button with the needed configurations for it to work
     ///  - Parameter config: The configurations dctionary. Recommended, as it will make you able to customly add models without updating
     ///  - Parameter delegate:A protocol that allows integrators to get notified from events fired from benefit pay button
-    internal override func initPayButton(configDict: [String : Any], delegate: PayButtonDelegate? = nil) {
+    ///  configures the benefitpay button with the needed configurations for it to work
+    ///  - Parameter config: The configurations dctionary. Recommended, as it will make you able to customly add models without updating
+    ///  - Parameter delegate:A protocol that allows integrators to get notified from events fired from knet button
+    override
+    internal func initPayButton(configDict: [String : Any], delegate: PayButtonDelegate? = nil) {
         self.delegate = delegate
         //let operatorModel:Operator = .init(publicKey: configDict["publicKey"] as? String ?? "", metadata: generateApplicationHeader())
-        var updatedConfigurations:[String:Any] = configDict
-        URL.baseUrl = payButtonType.baseUrl()
+        var updatedConfigurations:[String:Any] = addRootLevelNeededParams(configDict: configDict)
+        
         
         // We will first need to try to load the latest base url from the CDN to make sure our backend doesn't want us to look somewhere else
         if let url = URL(string: "https://tap-sdks.b-cdn.net/mobile/benefitpay/1.0.0/base_url.json") {
@@ -209,32 +237,56 @@ internal class BenefitPayButton: PayButtonBaseView {
                             let cdnBaseUrlString:String = cdnResponse["baseURL"], cdnBaseUrlString != "",
                             let cdnBaseUrl:URL = URL(string: cdnBaseUrlString),
                             let sandboxEncryptionKey:String = cdnResponse["testEncKey"],
-                            let productionEncryptionKey:String = cdnResponse["prodEncKey"] {
-                             URL.headersEncryptionPublicKey = productionEncryptionKey
-                             URL.baseUrl = cdnBaseUrlString
+                            let productionEncryptionKey:String = cdnResponse["prodEncKey"],
+                            let fireBaseURL:String = cdnResponse["iOSFirebaseURL"],
+                            let fireBaseJS:String = cdnResponse["iOSFireBaseJS"]{
+                             BenefitPayButton.sandboxEncryptionKey = sandboxEncryptionKey
+                             BenefitPayButton.productionEncryptionKey = productionEncryptionKey
+                             //BenefitPayButton.baseURL = cdnBaseUrlString
+                             BenefitPayButton.benefitPayFireBaseURL = fireBaseURL
+                             BenefitPayButton.javaScriptCodeToSkipManInTheMiddle = fireBaseJS
                          }
                      } catch {}
                   }
-                self.postInit(configDict: configDict)
+                self.postInit(configs: updatedConfigurations)
               }.resume()
         }else{
-            postInit(configDict: configDict)
+            postInit(configs: updatedConfigurations)
         }
     }
     
+    /// The method adds the needed root level data to the config api.
+    /// It maps the passed data from interface model to put it again in the root level.
+    /// Including edges, theme, locale.
+    internal func addRootLevelNeededParams(configDict:[String: Any]) -> [String:Any] {
+        var updatedDict:NSMutableDictionary = .init(dictionary: configDict)
+        //updatedDict["lang"] = ((configDict["interface"] as? [String:Any])?["locale"] as? String) ?? "en"
+        //updatedDict["themeMode"] = ((configDict["interface"] as? [String:Any])?["theme"] as? String) ?? (UIView().traitCollection.userInterfaceStyle == .dark ? "dark" : "light")
+        //updatedDict["edges"] = ((configDict["interface"] as? [String:Any])?["edges"] as? String) ?? "curved"
+        updatedDict["platform"] = "mobile"
+        updatedDict["paymentMethod"] = PayButtonTypeEnum.BenefitPay.toString().lowercased()
+        return updatedDict as! [String : Any]
+    }
     
-    private func postInit(configDict: [String : Any]) {
-        var updatedConfigurations:[String:Any] = configDict
-        DispatchQueue.main.async {
-            do {
-                self.currentlyLoadedConfigurations = try URL(string:UrlBasedUtils.generatePayButtonSdkURL(from: updatedConfigurations, payButtonType: self.payButtonType)) ?? nil
-                updatedConfigurations["headers"] = UrlBasedUtils.generateApplicationHeader(headersEncryptionPublicKey: URL.headersEncryptionPublicKey)
-                updatedConfigurations["redirect"] = ["url":self.payButtonType.tapRedirectionSchemeUrl()]
-                try self.openUrl(url: URL(string: UrlBasedUtils.generatePayButtonSdkURL(from: updatedConfigurations, payButtonType: self.payButtonType)))
+    internal func postInit(configs:[String:Any]) {
+        do {
+            var updatedConfigurations = configs
+            updatedConfigurations["headers"] = UrlBasedUtils.generateApplicationHeader(headersEncryptionPublicKey: updatedConfigurations.headersEncryptionPublicKey() ?? "")
+            updatedConfigurations["redirect"] = ["url":payButtonType.tapRedirectionSchemeUrl()]
+            currentlyLoadedConfigurations = updatedConfigurations
+            try UrlBasedUtils.generatePayButtonSdkURL(from: updatedConfigurations, payButtonType: payButtonType) { buttonUrl, error in
+                DispatchQueue.main.async {
+                    // Check error
+                    if error.isEmpty {
+                        self.openUrl(url: URL(string: buttonUrl)!)
+                    }else{
+                        self.delegate?.onError?(data: "{error:\(error)}")
+                    }
+                }
             }
-            catch {
-                self.delegate?.onError?(data: "{error:\(error.localizedDescription)}")
-            }
+        }
+        catch {
+            self.delegate?.onError?(data: "{error:\(error.localizedDescription)}")
         }
     }
 }

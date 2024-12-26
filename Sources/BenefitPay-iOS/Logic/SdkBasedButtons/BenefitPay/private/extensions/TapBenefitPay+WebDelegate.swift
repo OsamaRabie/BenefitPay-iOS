@@ -16,6 +16,19 @@ import UserNotificationsUI
 /// An extension to take care of the notifications being sent from the web view through the url schemes
 extension BenefitPayButton:WKNavigationDelegate {
     
+    public func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
+        guard let url = webView.url else { return }
+        
+        if url.absoluteString.hasPrefix(BenefitPayButton.benefitPayFireBaseURL) {
+            // This means, BenefitPay popup wil be displayed and we need to make our weview full screen
+            DispatchQueue.main.async {
+                webView.evaluateJavaScript(BenefitPayButton.javaScriptCodeToSkipManInTheMiddle, completionHandler: { _, error in
+                    print(error?.localizedDescription)
+                })
+            }
+        }
+    }
+    
     public func webView(_ webView: WKWebView, decidePolicyFor navigationAction: WKNavigationAction, decisionHandler: @escaping (WKNavigationActionPolicy) -> Void) {
         var action: WKNavigationActionPolicy?
         
@@ -31,6 +44,8 @@ extension BenefitPayButton:WKNavigationDelegate {
         }else{
             print("navigationAction2", url.absoluteString)
         }
+        
+        
         // In all cases when we get a feedback from the web view we will need to hide the loader if it is being displayed
         // Let us see if the web sdk is telling us something
         if( url.absoluteString.lowercased().contains(payButtonType.webSdkScheme())) {
