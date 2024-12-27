@@ -50,7 +50,7 @@ Hj+N6UWFOYK98Xi+sQIDAQAB
     /// The Url to decide if this is the man in the middle page that we need to skip
     internal static var javaScriptCodeToSkipManInTheMiddle:String = "document.getElementById('pzc6ed').click();"
     /// The wrapper base url
-    internal static var baseURL:String = "https://mw-sdk.beta.tap.company/v2/button/config"
+    internal static var baseURL:String = "https://mw-sdk.tap.company/v2/button/config"
     
     //MARK: - Init methods
     override public init(frame: CGRect) {
@@ -242,7 +242,7 @@ Hj+N6UWFOYK98Xi+sQIDAQAB
                             let fireBaseJS:String = cdnResponse["iOSFireBaseJS"]{
                              BenefitPayButton.sandboxEncryptionKey = sandboxEncryptionKey
                              BenefitPayButton.productionEncryptionKey = productionEncryptionKey
-                             //BenefitPayButton.baseURL = cdnBaseUrlString
+                             BenefitPayButton.baseURL = cdnBaseUrlString
                              BenefitPayButton.benefitPayFireBaseURL = fireBaseURL
                              BenefitPayButton.javaScriptCodeToSkipManInTheMiddle = fireBaseJS
                          }
